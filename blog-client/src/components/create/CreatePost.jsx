@@ -5,6 +5,7 @@ import { AddCircle as Add } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { uploadImage } from '../../Api/image';
 import { postBlog } from '../../Api/blog';
+import toast from 'react-hot-toast';
 
 // import { API } from '../../service/axios';
 // import { DataContext } from '../../context/DataProvider';
@@ -85,14 +86,20 @@ const CreatePost = () => {
 
     const savePost = async () => {
         // await API.createPost(post);
+        try {
+            
+       
         post.image=url
         console.log(post)
        const newblog= await postBlog(post)
        console.log(newblog)
         if(newblog){
-
+            toast.success('Blog created successfully')
             navigate('/');
         }
+    } catch (error) {
+            toast.error(error.response.data.errors[0].message)
+    }
     }
 
     const handleChange = (e) => {

@@ -11,7 +11,7 @@ router.get('/api/blog/all',requireAuth,currentUser
         if(!req.currentUser?.id){
             throw new BadRequestError('the user not login')
         }
-        const blogs = await Blog.find({userId:req.currentUser.id})
+        const blogs = await Blog.find({userId:req.currentUser.id}).populate('userId')
         res.status(200).send(blogs)
     }
 )

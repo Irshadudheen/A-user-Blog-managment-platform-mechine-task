@@ -8,6 +8,7 @@ import Header from './components/header/Header';
 import DetailView from './components/details/DetailView';
 import Update from './components/create/Update';
 import { currentUser } from './Api/user';
+import { Toaster } from 'react-hot-toast';
 const Login =lazy(()=>import('./components/account/Login'))
 
 const Home =lazy(()=>import('./components/home/Home')) 
@@ -38,6 +39,7 @@ const App = () => {
           isUserAuthenticated(true);
         }
       } catch (error) {
+        
         console.error('Error fetching user:', error);
       }
     };
@@ -51,6 +53,7 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
+      <Toaster/>
         <Box style={{ marginTop: 64 }}>
         <Suspense fallback={<>looding</>}>
           <Routes>

@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 // import { API } from '../../service/api';
 import { getBlogbyId, updateBlogById } from '../../Api/blog';
 import { uploadImage } from '../../Api/image';
+import toast from 'react-hot-toast';
 
 const Container = styled(Box)(({ theme }) => ({
     margin: '50px 100px',
@@ -95,10 +96,20 @@ const Update = () => {
 
     const updateBlogPost = async () => {
         // await API.updatePost(post);
+        try {
+            
+       
         const response = await updateBlogById(post,post.id);
         console.log(response,'edit succesfuly')
         // console.log(post)
+        toast.success('Blog post updated successfully');
         navigate(`/details/${id}`);
+    } catch (error) {
+        if(error.response.data.error[0].message)
+            toast.error(error.response.data.error[0].message)
+        else
+        toast.error('Error updating blog post')
+    }
     }
 
     const handleChange = (e) => {

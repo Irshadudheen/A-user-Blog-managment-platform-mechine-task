@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 import { userLoing, userSignUp } from '../../Api/user';
+import toast from 'react-hot-toast';
 // import { DataContext } from '../../context/DataProvider';
 
 const Component = styled(Box)`
@@ -97,6 +98,9 @@ const Login = () => {
 
     const loginUser = async () => {
         // let response = await API.userLogin(login);
+        try {
+            
+      
         console.log(login)
         const response = await userLoing(login)
         console.log(response)
@@ -113,6 +117,10 @@ const Login = () => {
         } else {
             showError('Something went wrong! please try again later');
         }
+    } catch (error) {
+        toast.error(error.response.data.errors[0].message)
+            console.log(error.response.data.errors[0].message)
+    }
     }
 
     const signupUser = async () => {
