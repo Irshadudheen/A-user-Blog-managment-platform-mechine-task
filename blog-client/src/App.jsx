@@ -7,7 +7,7 @@ import Header from './components/header/Header';
 
 import DetailView from './components/details/DetailView';
 import Update from './components/create/Update';
-import { currentUser } from './Api/user';
+import useGetUserData from './hook/useGetUser';
 import { Toaster } from 'react-hot-toast';
 const Login =lazy(()=>import('./components/account/Login'))
 
@@ -25,29 +25,16 @@ const PrivateRoute = ({ isAuthenticated, ...props }) => {
 };
 
 const App = () => {
-
+const currentUser = useGetUserData()
+console.log(currentUser,'the current user from redux')
 
   const [isAuthenticated, isUserAuthenticated] = useState(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await currentUser();
-        if (response?.currentUser) {
-          console.log(response.currentUser);
-         
-          isUserAuthenticated(true);
-        }
-      } catch (error) {
-        
-        console.error('Error fetching user:', error);
-      }
-    };
-    fetchUser();
-  }, []);
 
   useEffect(() => {
-    console.log('isAuthenticated updated:', isAuthenticated);
+    if(currentUser.token){
+      isUserAuthenticated(true)
+    }
   }, [isAuthenticated]);
 
   return (
@@ -57,7 +44,7 @@ const App = () => {
         <Box style={{ marginTop: 64 }}>
         <Suspense fallback={<>looding</>}>
           <Routes>
-            <Route path="/account" element={isAuthenticated?<Navigate to='/'/>:<Login />} />
+            <Route path="/account" element={currentUser&&currentUser.token?<Navigate to='/'/>:<Login />} />
             <Route path="/create" element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
               <Route path="/create" element={<CreatePost />} />
             </Route>

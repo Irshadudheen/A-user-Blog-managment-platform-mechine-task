@@ -30,7 +30,8 @@ const userScheema = new Schema({
     password:{
         type:String,
         required:true
-    }
+    },
+    token: { type: String }
 },{toJSON:{
     transform(doc,ret){
         ret.id=ret._id;

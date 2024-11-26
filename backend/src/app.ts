@@ -15,7 +15,7 @@ import {
    
 } from './routes/index'
 import { errorhandler } from './middlewares/error-handler'
-import cookieSession from 'cookie-session'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { NotFoundError } from './errors/not-found-error'
 const app = express()
@@ -23,10 +23,7 @@ const app = express()
 
 app.use(json())
 
-app.use(cookieSession({
-    signed: false
-    , secure: false
-}))
+app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(cors({ origin:process.env.clientPort, 
     credentials: true}))
 app.use(currentUserRouter)

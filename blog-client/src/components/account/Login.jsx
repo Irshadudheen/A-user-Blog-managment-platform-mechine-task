@@ -2,10 +2,11 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { TextField, Box, Button, Typography, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-
+import {useDispatch} from 'react-redux'
 
 import { userLoing, userSignUp } from '../../Api/user';
 import toast from 'react-hot-toast';
+import {setUser} from '../../redux/userSlice'
 // import { DataContext } from '../../context/DataProvider';
 
 const Component = styled(Box)`
@@ -78,7 +79,7 @@ const Login = () => {
     const [signup, setSignup] = useState(signupInitialValues);
     const [error, showError] = useState('');
     const [account, toggleAccount] = useState('login');
-
+    const dispatch = useDispatch()
     const navigate = useNavigate();
     // const { setAccount } = useContext(DataContext);
 
@@ -112,14 +113,28 @@ const Login = () => {
 
             // isUserAuthenticated(true)
             setLogin(loginInitialValues);
-            // navigate('/');
-            window.location.href='/'
+            // console.log(response)
+            // return
+            dispatch(setUser({
+                name: response.name,
+                email:response.email,
+                id: response.id,
+                token:response.token
+            }))
+            navigate('/');
+            // window.location.href='/'
         } else {
             showError('Something went wrong! please try again later');
         }
     } catch (error) {
-        toast.error(error.response.data.errors[0].message)
+        console.log(error)
+        if(error.response?.data.errors[0].message){
+
+            toast.error(error.response.data.errors[0].message)
             console.log(error.response.data.errors[0].message)
+        }
+            else
+            toast.error(error)
     }
     }
 

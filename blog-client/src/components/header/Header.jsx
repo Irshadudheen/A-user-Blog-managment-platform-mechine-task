@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../Api/user';
+import { useDispatch } from 'react-redux';
+import { removeUser } from '../../redux/userSlice';
 
 
 const Component = styled(AppBar)`
@@ -23,10 +25,13 @@ const Container = styled(Toolbar)`
 const Header = () => {
 
     const navigate = useNavigate();
-
+const dispatch = useDispatch()
    const handleLogout=async()=>{
+
     await logout()
-    window.location.href='/account'
+    dispatch(removeUser())
+    navigate('/account')
+  
    }
         
     return (

@@ -24,7 +24,7 @@ router.post('/api/users/signin', [
     if (!existingUser) {
         throw new BadRequestError('Email not found');
     }
-    const passwordsMatch = await Password.compare(
+    const passwordsMatch= await Password.compare(
         existingUser.password,
         password
     )
@@ -36,7 +36,12 @@ router.post('/api/users/signin', [
         email: existingUser.email
     }, process.env.JWT_KEY!)
     req.session = { jwt: userJWt };
-    res.status(200).send(existingUser);
+   
+    const userData:any = existingUser.toObject()
+    userData.token = userJWt
+    userData.id=existingUser._id
+    console.log(existingUser)
+    res.status(200).send(userData);
 })
 
 export { router as siginRouter };
